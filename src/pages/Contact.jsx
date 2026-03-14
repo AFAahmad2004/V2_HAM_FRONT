@@ -1,28 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 
 const GREEN = "#1B4D2E";
 const GOLD  = "#C9A84C";
-const GOLD2 = "#e8c96a";
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async () => {
-    if (!form.name || !form.email || !form.message) { setStatus("error"); return; }
-    setLoading(true);
-    try {
-      const res = await fetch("http://127.0.0.1:5000/contact", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      if (res.ok) { setStatus("success"); setForm({ name: "", email: "", message: "" }); }
-      else setStatus("error");
-    } catch { setStatus("servererror"); }
-    finally { setLoading(false); }
-  };
-
   return (
     <div style={{ direction: "rtl", fontFamily: "'Segoe UI', Tahoma, sans-serif", background: "#f5f7f5", minHeight: "100vh" }}>
       {/* Header */}
@@ -34,23 +15,44 @@ export default function Contact() {
 
       <div style={{ maxWidth: "680px", margin: "0 auto", padding: "48px 24px" }}>
         {/* Info Cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "36px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
           {[
-            { icon: "🏢", label: "المهنس المعماري : حمز عرب",     value: "897 269 956 963+" },
-            { icon: "🏢", label: "مدير المشاريع : عقبة عرب",     value: "287 462 951 963+" },
-            { icon: "📧", label: "البريد",      value: "hamzaarab987@gmail.com" },
-            { icon: "📍", label: "الموقع",      value: "ادلب / ارمناز - لدينا تنفيذ في جميع المحافظات السورية" },
-            { icon: "🚚", label: "الخدمات ", value: "خدمة شحن البضائع" },
+            { icon: "📞", label: "الهاتف",     value: "+966 50 000 0000" },
+            { icon: "📧", label: "البريد",      value: "info@arabdecoration.com" },
+            { icon: "📍", label: "الموقع",      value: "الرياض، السعودية" },
+            { icon: "🕐", label: "أوقات العمل", value: "9ص – 9م (سبت - خميس)" },
           ].map(item => (
-            <div key={item.label} style={{ padding: "18px", background: "#fff", border: `1px solid #e8ede8`, borderRadius: "14px", borderTop: `3px solid ${GOLD}` }}>
-              <span style={{ fontSize: "22px" }}>{item.icon}</span>
-              <p style={{ color: GREEN, fontSize: "12px", fontWeight: "700", margin: "8px 0 4px" }}>{item.label}</p>
-              <p style={{ color: "#555", fontSize: "13px", margin: 0 }}>{item.value}</p>
+            <div key={item.label} style={{ padding: "22px", background: "#fff", border: `1px solid #e8ede8`, borderRadius: "16px", borderTop: `3px solid ${GOLD}`, boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+              <span style={{ fontSize: "28px" }}>{item.icon}</span>
+              <p style={{ color: GREEN, fontSize: "12px", fontWeight: "700", margin: "10px 0 4px" }}>{item.label}</p>
+              <p style={{ color: "#555", fontSize: "14px", margin: 0 }}>{item.value}</p>
             </div>
           ))}
         </div>
 
-    
+        {/* Social */}
+        <div style={{ marginTop: "32px", background: "#fff", padding: "28px", borderRadius: "16px", border: `1px solid #e8ede8`, textAlign: "center" }}>
+          <div style={{ width: "4px", height: "22px", background: `linear-gradient(180deg, ${GREEN}, ${GOLD})`, borderRadius: "2px", margin: "0 auto 16px" }} />
+          <p style={{ color: GREEN, fontWeight: "800", fontSize: "16px", margin: "0 0 16px" }}>تابعنا على وسائل التواصل</p>
+          <div style={{ display: "flex", justifyContent: "center", gap: "12px" }}>
+            {[
+              { icon: "📘", label: "Facebook" },
+              { icon: "📸", label: "Instagram" },
+              { icon: "🐦", label: "Twitter" },
+              { icon: "💬", label: "WhatsApp" },
+            ].map(s => (
+              <button key={s.label} title={s.label} style={{
+                width: "52px", height: "52px",
+                background: "#f5f7f5", border: `1px solid #e8ede8`,
+                borderRadius: "12px", cursor: "pointer", fontSize: "22px",
+                transition: "all 0.2s",
+              }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.transform = "translateY(-3px)"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "#e8ede8"; e.currentTarget.style.transform = "translateY(0)"; }}
+              >{s.icon}</button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

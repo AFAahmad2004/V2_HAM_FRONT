@@ -3,16 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const categories = [
-  { id: "kitchens",       label: "مطابخ",             icon: "🍳", img: "/cat-kitchens.jpg" },
-  { id: "bedrooms",       label: "غرف نوم",            icon: "🛏️", img: "/cat-bedrooms.jpg" },
-  { id: "living",         label: "غرف معيشة",          icon: "🛋️", img: "/cat-living.jpg" },
-  { id: "offices",        label: "مكاتب",              icon: "🪑", img: "/cat-offices.jpg" },
-  { id: "bathrooms",      label: "حمامات",             icon: "🚿", img: "/cat-bathrooms.jpg" },
-  { id: "outdoor",        label: "خارجي",              icon: "🌿" },
-  { id: "tv-decor",       label: "ديكورات شاشة",       icon: "📺", img: "/cat-tv-decor.jpg" },
-  { id: "plans-2d",       label: "مخططات 2D",          icon: "📐",img:"/cat-plans-2d.jpg" },
-  { id: "facades",        label: "واجهات خارجية",      icon: "🏛️",img:"/cat-facades.jpg" },
-  { id: "cladding",       label: "مواد الإكساء",       icon: "🪵" },
+  { id: "kitchens",  label: "مطابخ",        icon: "🍳" },
+  { id: "bedrooms",  label: "غرف نوم",       icon: "🛏️" },
+  { id: "living",    label: "غرف معيشة",     icon: "🛋️" },
+  { id: "offices",   label: "مكاتب",         icon: "🪑" },
+  { id: "bathrooms", label: "حمامات",        icon: "🚿" },
+  { id: "outdoor",   label: "خارجي",         icon: "🌿" },
 ];
 
 const GREEN  = "#1B4D2E";
@@ -20,21 +16,13 @@ const GOLD   = "#C9A84C";
 const GOLD2  = "#e8c96a";
 const DARK   = "#163d24";
 
-export default function Sidebar({ isOpen, onClose, isMobile }) {
+export default function Sidebar({ isOpen, onClose }) {
   const { auth, logout } = useAuth();
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("products");
 
   const handleNav = (path) => { navigate(path); onClose(); };
   const handleLogout = () => { logout(); navigate("/login"); onClose(); };
-
-  // روابط الناف بار التي تظهر على الجوال فقط في السايدبار
-  const navLinks = [
-    { to: "/", label: "الرئيسية", icon: "🏠" },
-    ...(auth?.role === "admin" ? [{ to: "/admin", label: "الإدارة", icon: "⚙️" }] : []),
-    ...(auth?.role === "client" ? [{ to: "/client", label: "لوحتي", icon: "📋" }] : []),
-    { to: "/contact", label: "تواصل معنا", icon: "✉️" },
-  ];
 
   const tabBtn = (key, label) => (
     <button key={key} onClick={() => setActiveSection(key)} style={{
@@ -67,64 +55,24 @@ export default function Sidebar({ isOpen, onClose, isMobile }) {
         direction: "rtl", overflowY: "auto",
       }}>
 
-        {/* Header — بدون "ديكور عربي" */}
+        {/* Header */}
         <div style={{
           padding: "20px", borderBottom: `1px solid rgba(201,168,76,0.2)`,
           display: "flex", justifyContent: "space-between", alignItems: "center",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <img src="/logo.png" alt="logo" style={{ height: "44px", objectFit: "contain" }}
+            <img src="/logo.png" alt="logo" style={{ height: "36px", objectFit: "contain" }}
               onError={e => e.target.style.display = "none"} />
-            <div style={{ color: GOLD, fontWeight: "800", fontSize: "14px" }}>ARAB DECORATION</div>
+            <div>
+              <div style={{ color: GOLD, fontWeight: "800", fontSize: "13px" }}>ARAB DECORATION</div>
+              <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "10px" }}>ديكور عربي</div>
+            </div>
           </div>
           <button onClick={onClose} style={{
             background: "rgba(255,255,255,0.08)", border: "none", color: "#fff",
             width: "32px", height: "32px", borderRadius: "50%", cursor: "pointer", fontSize: "14px",
           }}>✕</button>
         </div>
-
-        {/* روابط التنقل — تظهر على الجوال فقط */}
-        {isMobile && (
-          <div style={{ padding: "10px 14px", borderBottom: `1px solid rgba(201,168,76,0.15)` }}>
-            <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", margin: "0 0 8px", letterSpacing: "1px" }}>التنقل</p>
-            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              {navLinks.map(link => (
-                <button key={link.to} onClick={() => handleNav(link.to)} style={{
-                  width: "100%", display: "flex", alignItems: "center", gap: "10px",
-                  padding: "11px 14px",
-                  background: "rgba(201,168,76,0.08)",
-                  border: `1px solid rgba(201,168,76,0.2)`,
-                  borderRadius: "10px", cursor: "pointer",
-                  color: GOLD, fontSize: "14px", fontWeight: "700", textAlign: "right",
-                  transition: "all 0.2s",
-                }}
-                  onMouseEnter={e => e.currentTarget.style.background = "rgba(201,168,76,0.2)"}
-                  onMouseLeave={e => e.currentTarget.style.background = "rgba(201,168,76,0.08)"}
-                >
-                  <span>{link.icon}</span>
-                  <span>{link.label}</span>
-                </button>
-              ))}
-              {/* زر دخول/خروج على الجوال */}
-              {auth ? (
-                <button onClick={handleLogout} style={{
-                  width: "100%", display: "flex", alignItems: "center", gap: "10px",
-                  padding: "11px 14px", marginTop: "4px",
-                  background: "rgba(255,80,60,0.08)", border: "1px solid rgba(255,80,60,0.25)",
-                  borderRadius: "10px", cursor: "pointer", color: "#ff6b5b",
-                  fontSize: "14px", fontWeight: "600", textAlign: "right",
-                }}>
-                  <span>🚪</span><span>تسجيل الخروج</span>
-                </button>
-              ) : (
-                <div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
-                  <button onClick={() => handleNav("/login")} style={{ flex: 1, padding: "11px", background: GOLD, border: "none", borderRadius: "10px", cursor: "pointer", color: GREEN, fontWeight: "800", fontSize: "14px" }}>دخول</button>
-                  <button onClick={() => handleNav("/register")} style={{ flex: 1, padding: "11px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px", cursor: "pointer", color: "#fff", fontSize: "14px" }}>تسجيل</button>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
 
         {/* Tabs */}
         <div style={{
@@ -137,14 +85,14 @@ export default function Sidebar({ isOpen, onClose, isMobile }) {
           {tabBtn("contact",  "تواصل")}
         </div>
 
-        {/* ===== PRODUCTS ===== */}
+        {/* PRODUCTS */}
         {activeSection === "products" && (
           <div style={{ padding: "4px 14px", flex: 1 }}>
             <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", marginBottom: "10px", letterSpacing: "1px" }}>تصفح الأقسام</p>
             {categories.map((cat) => (
               <button key={cat.id} onClick={() => handleNav(`/products/${cat.id}`)} style={{
                 width: "100%", display: "flex", alignItems: "center", gap: "12px",
-                padding: "8px 10px", marginBottom: "6px",
+                padding: "12px 14px", marginBottom: "6px",
                 background: "rgba(255,255,255,0.05)",
                 border: `1px solid rgba(201,168,76,0.1)`,
                 borderRadius: "12px", cursor: "pointer", color: "#e8f0e8",
@@ -153,14 +101,7 @@ export default function Sidebar({ isOpen, onClose, isMobile }) {
                 onMouseEnter={e => { e.currentTarget.style.background = `rgba(201,168,76,0.15)`; e.currentTarget.style.borderColor = `rgba(201,168,76,0.4)`; e.currentTarget.style.transform = "translateX(-4px)"; }}
                 onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.borderColor = "rgba(201,168,76,0.1)"; e.currentTarget.style.transform = "translateX(0)"; }}
               >
-                {/* صورة مصغرة أو إيموجي */}
-                {cat.img ? (
-                  <div style={{ width: "38px", height: "38px", borderRadius: "8px", overflow: "hidden", flexShrink: 0, border: "1px solid rgba(201,168,76,0.3)" }}>
-                    <img src={cat.img} alt={cat.label} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  </div>
-                ) : (
-                  <span style={{ fontSize: "22px", flexShrink: 0 }}>{cat.icon}</span>
-                )}
+                <span style={{ fontSize: "20px" }}>{cat.icon}</span>
                 <span style={{ fontWeight: "500" }}>{cat.label}</span>
                 <span style={{ marginRight: "auto", color: GOLD, fontSize: "12px" }}>←</span>
               </button>
@@ -168,7 +109,7 @@ export default function Sidebar({ isOpen, onClose, isMobile }) {
           </div>
         )}
 
-        {/* ===== ACCOUNT ===== */}
+        {/* ACCOUNT */}
         {activeSection === "account" && (
           <div style={{ padding: "8px 14px", flex: 1 }}>
             {auth ? (
@@ -227,7 +168,7 @@ export default function Sidebar({ isOpen, onClose, isMobile }) {
           </div>
         )}
 
-        {/* ===== FAVORITES ===== */}
+        {/* FAVORITES */}
         {activeSection === "favorites" && (
           <div style={{ padding: "8px 14px", flex: 1 }}>
             <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", marginBottom: "14px", letterSpacing: "1px" }}>المنتجات المحفوظة</p>
@@ -243,15 +184,15 @@ export default function Sidebar({ isOpen, onClose, isMobile }) {
           </div>
         )}
 
-        {/* ===== CONTACT ===== */}
+        {/* CONTACT */}
         {activeSection === "contact" && (
           <div style={{ padding: "8px 14px", flex: 1 }}>
             <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", marginBottom: "14px", letterSpacing: "1px" }}>معلومات التواصل</p>
             {[
-              { icon: "🏢", label: "المهنس المعماري : حمز عرب",     value: "897 269 956 963+"},
-              {  icon: "🏢", label: "مدير المشاريع : عقبة عرب",     value: "287 462 951 963+" },
-              { icon: "📧", label: "البريد",      value: "hamzaarab987@gmail.com"  },
-              {  icon: "📍", label: "الموقع",      value: "ادلب / ارمناز" },
+              { icon: "📞", label: "الهاتف",       value: "+966 50 000 0000" },
+              { icon: "📧", label: "البريد",        value: "info@arabdecoration.com" },
+              { icon: "📍", label: "الموقع",        value: "الرياض، المملكة العربية السعودية" },
+              { icon: "🕐", label: "أوقات العمل",   value: "السبت – الخميس: 9ص – 9م" },
             ].map(item => (
               <div key={item.label} style={{ padding: "12px 14px", marginBottom: "8px", background: "rgba(255,255,255,0.04)", border: `1px solid rgba(201,168,76,0.12)`, borderRadius: "12px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "3px" }}>
@@ -289,8 +230,6 @@ export default function Sidebar({ isOpen, onClose, isMobile }) {
 
 function FavoritesList({ onNavigate }) {
   const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-  const GOLD = "#C9A84C";
-  const GREEN = "#1B4D2E";
 
   if (favorites.length === 0) return (
     <div style={{ textAlign: "center", padding: "40px 0" }}>
@@ -317,9 +256,9 @@ function FavoritesList({ onNavigate }) {
       )}
       <div style={{ flex: 1, minWidth: 0 }}>
         <p style={{ color: "#e8f0e8", fontSize: "13px", margin: "0 0 3px", fontWeight: "600", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.name}</p>
-        <p style={{ color: GOLD, fontSize: "12px", margin: 0 }}>{item.price}</p>
+        <p style={{ color: "#C9A84C", fontSize: "12px", margin: 0 }}>{item.price}</p>
       </div>
-      <span style={{ color: GOLD, fontSize: "14px" }}>←</span>
+      <span style={{ color: "#C9A84C", fontSize: "14px" }}>←</span>
     </div>
   ));
 }
