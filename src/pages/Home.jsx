@@ -26,8 +26,8 @@ export default function Home() {
 
   useEffect(() => {
     Promise.all([
-      fetch("http://127.0.0.1:5000/updates").then(r => r.json()).catch(() => []),
-      fetch("http://127.0.0.1:5000/products?home=1").then(r => r.json()).catch(() => []),
+      fetch("https://back-h-sr2i.onrender.com/updates").then(r => r.json()).catch(() => []),
+      fetch("https://back-h-sr2i.onrender.com/products?home=1").then(r => r.json()).catch(() => []),
     ]).then(([u, p]) => { setUpdates(u); setFeaturedProducts(p); setLoading(false); });
   }, []);
 
